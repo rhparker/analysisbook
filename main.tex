@@ -8,7 +8,7 @@
 \usepackage{multicol}
 % \usepackage{subeqn}
 
-\usepackage{amssymb,amsthm,mathrsfs,amsfonts,dsfont,mathtools,esint}
+\usepackage{amssymb,amsthm,mathrsfs,amsfonts,dsfont,mathtools,esint,bbm}
 \usepackage[shortlabels]{enumitem} 
 \usepackage{parskip}
 \setlength{\parindent}{0pt}
@@ -37,14 +37,15 @@
 \def\calA{{\mathcal A}}
 \def\calB{{\mathcal B}}
 \def\calE{{\mathcal E}}
+\def\calF{{\mathcal F}}
 \def\calM{{\mathcal M}}
 \def\calN{{\mathcal N}}
 \def\calP{{\mathcal P}}
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}{Lemma}[theorem]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
 \newtheorem{proposition}{Proposition}[section]
 
 \theoremstyle{definition}
@@ -61,8 +62,10 @@
 \def\bfE{\mbox{\boldmath$E$}}
 \def\bfG{\mbox{\boldmath$G$}}
 
-% cleveref package
+% hyperref/cleveref package
+% \usepackage{hyperref}
 \usepackage[capitalize,nameinlink]{cleveref}
+
 
 % Per SIAM Style Manual, "section" should be lowercase
 \crefname{section}{section}{sections}
@@ -125,6 +128,7 @@
 \renewcommand\bfdefault{b}
 
 \usepackage{subfiles} % Best loaded last in the preamble
+\usepackage{xr}
 
 \title{Real Analysis}
 \author{Ross Parker}
@@ -165,6 +169,11 @@
 % \end{chapterquote}
 
 \subfile{1measures}
+
+\appendix
+\chapter[Appendix]%
+{Appendix}
+\subfile{appendix}
 
 
 % \begin{exercises}

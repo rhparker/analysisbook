@@ -1,5 +1,7 @@
 \documentclass[main.tex]{subfiles}
 
+% \externaldocument{appendix}
+
 \begin{document}
 
 The idea of measure is a fundamental concept in mathematics. Mathematicians in ancient times knew how to compute the areas of figures such as triangles, rectangles, and circles. The development of calculus allowed us to measure the ``area under a curve'' by approximating that area with a horizontal stack of rectangles and taking the limit as the width of the rectangles goes to 0.
@@ -41,15 +43,15 @@ Why might you want to do such a thing? Here are a few applications to get starte
 With this motivation in mind, we will define a measure $\mu$ on an arbitrary set $X$. What properties do we want this measure to have? If $A$ is a subset of $X$, then we certainly want $\mu(A) \geq 0$, since ``negative length'' makes no sense! We also want to permit $\mu(A)$ to be infinite for some subsets of $X$. The entire real line has ``infinite length'' since it has no beginning and no end, so it makes sense that we might want $\mu(\R) = \infty$. At the other extreme, the empty set should have no length, area, or volume, so we want to have $\mu(\varnothing) = 0$. Finally, if $A$ and $B$ are disjoint subsets of $X$, it makes sense that we should have $\mu(A\cup B) = \mu(A) + \mu(B)$. In fact, we will actually demand a stronger additivity property, as you will see in the following definition.
 
 \begin{definition}\label{def:measure}
-A \emph{measure} on a set $X$ is a function $\mu$ on subsets of $X$ with the following three properties:
+Let $X$ be a set, and let $\calM$ be a collection of subsets of $X$. A \emph{measure} is a function $\mu$ defined on $\calM$ which satisfies the following three properties:
 \begin{romannum}
-\item $\mu(E) \geq 0$, and $\infty$ is allowed.
-\item $\mu(\varnothing) = 0$.
-\item If the sets $\{E_k\}_{k \in \N}$ are disjoint, then 
+\item (Non-negativity) $\mu(E) \geq 0$, and $\infty$ is allowed.
+\item (Null empty set) $\mu(\varnothing) = 0$.
+\item (Countable additivity) If the sets $\{E_k\}_{k \in \N}$ are disjoint, then 
 	\begin{equation}\label{eq:meas:cadd}
 	\mu \left( \bigcup_{k=1}^\infty E_k \right) = \sum_{k=1}^\infty \mu(E_k),
 	\end{equation}
-	where this is infinite if the sum does not converge to a finite value. This last property is called \emph{countable additivity}.
+	where the sum is infinite if it does not converge to a finite value. 
 \end{romannum}
 \end{definition}
 Depending on the set $X$, other properties we might like $\mu$ to have (but are not part of the definition of a measure) are:
@@ -60,8 +62,7 @@ Depending on the set $X$, other properties we might like $\mu$ to have (but are 
 \end{romannum}
 It is worth pointing out that countable additivity implies \emph{finite additivity}, i.e. if $E_1, \dots, E_k$ are disjoint sets, then $\mu \left( \bigcup_{k=1}^n E_k \right) = \sum_{k=1}^n \mu(E_k)$. To see this, take $E_j = \varnothing$ for $j > n$ in \cref{eq:meas:cadd}.
 
-
-Notice that I intentionally left the domain of $\mu$ vague. We would like the domain of $\mu$ to be as large as possible. Ideally, we would like it to the power set of $X$, denoted $\calP(X)$, which is the set of all subsets of $X$. However, to quote the musical Les Miserables, ``there are some dreams that cannot be,'' as we will see in the following example.
+Notice that I intentionally left the domain $\calM$ of $\mu$ vague. We would $\calM$ to be as large as possible. Ideally, we would like it to the power set of $X$, denoted $\calP(X)$, which is the set of all subsets of $X$. However, to quote the musical Les Miserables, ``there are some dreams that cannot be,'' as we will see in the following example.
 
 \begin{example}\label{ex:nonmeasurableset}
 Suppose we have a measure $\mu$ on the interval $I = [0, 1)$. Since we want this to represent ``length'', we will assume that properties (iv) and (v) hold, as well as the ones in \cref{def:measure}. We will demonstrate that the properties (iii), (iv), and (v) are inconsistent. In other words, we will construct a ``nonmeasurable set''. Here's how we do it.
@@ -76,7 +77,7 @@ Suppose we have a measure $\mu$ on the interval $I = [0, 1)$. Since we want this
 	\item Show that every $x \in I$ belongs to at least one set $N_r$. Since the equivalence relation $\sim$ partitions $I$, $x$ must belong to one of these equivalence classes. Since a representative from each equivalence class is contained in $N$, this means that $x \in [y]$ for some $y \in N$, so that $x \sim y$. This in turn implies that $x - y = r$ for some rational number $r$. If $x \geq y$, then $x \in N_r$, and if $x < y$, then $x \in N_{r+1}$.
 	\item Show that $x$ cannot belong to two distinct $N_r$. If $x \in N_r \cap N_s$ for distinct $r$ and $s$, then both $p = x - r\:(\Mod 1)$ and $q = x - s\:(\Mod 1)$ are elements of $N$. The difference $p - q = s - r\:(\Mod 1)$ is rational, which is impossible since the difference between any two distinct elements in $N$ is irrational.
 	\end{bulletlist}
-	\item Since the set $\{ N_r : r \in \Q \cap I \}$ partitions $I$, it follows from properties (v) and (iii) above and part 5 that
+	\item By property (v), $\mu( [0, 1) ) = \mu( [0, 1] ) = 1$, since removing the right endpoint of a closed interval does not change its length. Since the set $\{ N_r : r \in \Q \cap I \}$ partitions $I$, it follows from properties (iii)  and part 5
 	\begin{align*}
 	1 = \mu( [0, 1) ) &= \sum_{r \in \Q \cap I} \mu(N_r) = \sum_{r \in \Q \cap I} \mu(N).
 	\end{align*}
@@ -92,15 +93,15 @@ Suppose we have a measure $\mu$ on the interval $I = [0, 1)$. Since we want this
 \end{remunerate}
 \end{example}
 
-	\begin{figure}
-	\centerline{\includegraphics[width=10cm]{images/measures/nonmeasurableset.eps}}
-	\caption{Construction of nonmeasurable set from \cref{ex:nonmeasurableset}.}
-	\label{fig:nonmeasurableset}
-	\end{figure}
+\begin{figure}
+\centerline{\includegraphics[width=10cm]{images/measures/nonmeasurableset.eps}}
+\caption{Construction of nonmeasurable set from \cref{ex:nonmeasurableset}.}
+\label{fig:nonmeasurableset}
+\end{figure}
 
 In a sense, we ``cheated'' in the above example. Since used the axiom of choice to give us our set $N$. we have no idea what $N$ ``actually is''. (For your next party trick, you can use the axiom of choice to take a ball apart into six pieces and recombine them to get two balls of the exact same size, which is known as the Banach–Tarski paradox.) Be that as it may, we have shown that we cannot define a measure on $X$ with all of the properties we desire whose domain is the entire power set of $X$. 
 
-If $X$ is a finite or countable set, we are actually able to define a measure on $\calP(X)$ without any issues. First, consider the case of a finite set $X = \{ x_1, x_2, \dots, x_n \}$. A \emph{singleton} is a set with exactly one element. If we specify the value of $\mu\left(\{ x_k \}\right)$ for all singletons $\{ x_k \}$, then the measure
+If $X$ is a finite or countable set, we are actually able to define a measure on $\calM = \calP(X)$ without any issues. First, consider the case of a finite set $X = \{ x_1, x_2, \dots, x_n \}$. A \emph{singleton} is a set with exactly one element. If we specify the value of $\mu\left(\{ x_k \}\right)$ for all singletons $\{ x_k \}$, then the measure
 \begin{equation}\label{eq:meas:finite}
 \mu(A) = \sum_{x_k \in A} \mu\left(\{ x_k \}\right)
 \end{equation}
@@ -114,9 +115,9 @@ Similarly, let $X = \{ x_k\}_{k \in \N}$ be a countable set. If we once again sp
 \begin{example}Let $X = \N$, and define two measures $\mu_1$ and $\mu_2$ by $\mu_1(n) = n$ and $\mu_2(n) = \frac{1}{2^n}$. Then $\mu_1(\N) = \infty$, but $\mu_2(\N) = \sum_{n=1}^\infty \frac{1}{2^n} = 1$.
 \end{example}
 
-\section{Sigma Algebras}
+\section{Sigma algebras}
 
-In the previous section, we showed that if $X$ is an uncountable set, we cannot guarantee that a measure $\mu$ will be well defined on all subsets of $X$ and have all of the properties we desire. How do we get out of this quandary? One option would be to relax our definition of a measure, say by requiring finite additivity instead of countable additivity, or to give up properties (iv) and (v). Since we don't really want to do that, we will instead narrow the domain of $\mu$ from the power set of $X$ to something smaller. The goal is to come up with a collection of subsets of $X$ on which our measure $\mu$ is well-defined. Although this collection cannot contain all subsets of $X$, it should ideally be ``as large as possible''. In addition, it should at minimum contain familiar sets such as open sets and closed sets. It turns out that this is possible, and, in the words of the great philosophers Mick Jagger and Keith Richards, ``You can't always get what you want, but if you try sometimes, you just might find you get what you need''. The natural choice for the domain of a measure is an object known as a $\s$-algebra.
+In the previous section, we showed that if $X$ is an uncountable set, we cannot guarantee that a measure $\mu$ will be well defined on all subsets of $X$ and have all of the properties we desire. How do we get out of this quandary? One option would be to relax our definition of a measure, say by requiring finite additivity instead of countable additivity, or to give up properties (iv) and (v). Since we don't really want to do that, we will instead narrow the domain of $\mu$ from the power set of $X$ to something smaller. The goal is to come up with a collection of subsets of $X$ on which our measure $\mu$ is well-defined. Although this collection cannot contain all subsets of $X$, it should ideally be ``as large as possible''. In addition, it should at minimum contain familiar sets such as open sets and closed sets. It turns out that this is possible, which means that, in the words of the great philosophers Mick Jagger and Keith Richards, ``You can't always get what you want, but if you try sometimes, you just might find you get what you need.'' The natural choice for the domain of a measure is an object known as a $\s$-algebra (sometimes called a $\s$-field).
 
 \begin{definition}\label{def:salg}
 A collection $\calM$ of subsets of $X$ is a \emph{$\s$-algebra} if it satisfies the following three properties:
@@ -132,7 +133,7 @@ An \emph{algebra} is the same thing except it is only closed under \emph{finite}
 Other properties of $\s$-algebras which follow from \cref{def:salg} and standard theorems from set theory include:
 \begin{romannum}\setcounter{rmnum}{3}
 	\item $\varnothing \in \calM$.
-	\item $\calM$ is closed under countable intersection, i.e. if $\{E_k\}_{k \in \N} \subset \calM$ then $\begin{aligned}\bigcap_{k=1}^\infty E_k \in \calM \end{aligned}$. This follows from DeMorgan's laws, which says that the complement of the intersection is the union of the complements:
+	\item $\calM$ is closed under countable intersection, i.e. if $\{E_k\}_{k \in \N} \subset \calM$ then $\begin{aligned}\bigcap_{k=1}^\infty E_k \in \calM \end{aligned}$. This follows from De Morgan's laws (\cref{th:DeMorgan}):
 	\[
 	\bigcap_{k=1}^\infty E_k = \left[ \left( \bigcap_{k=1}^\infty E_k \right)^c \right]^c
 	= \left( \bigcup_{k=1}^\infty E_k^c \right)^c.
@@ -163,36 +164,193 @@ The most important of these $\s$-algebras is the Borel $\sigma$-algebra.
 The \emph{Borel $\s$-algebra} on $X$, denoted $\calB_X$, is the $\s$-algebra generated by the collection of open sets of $X$. The elements of the Borel $\s$-algebra are called \emph{Borel sets}.
 \end{definition}
 
-This definition requires that $X$ be a topological space (so that the open sets are well-defined), but if it isn't, why are we bothering with all of this in the first place? It is worth noting that, in general, $\s$-algebras are huge and unwieldy, and there is no ``nice'' way of writing down an arbitrary element of, say, the Borel $\s$-algebra. The Borel $\s$-algebra contains all closed sets, since $\s$-algebras are closed under complement. 
+This definition requires that $X$ be a topological space (so that the open sets are well-defined), but if it isn't, why are we bothering with all of this in the first place? The Borel $\s$-algebra contains all closed sets, since $\s$-algebras are closed under complement. In addition, it contains:
+\begin{bulletlist}
+	\item Countable intersections of open sets, known as \emph{$G_\d$ sets} (these are not necessarily open).
+	\item Countable unions of closed sets, known as \emph{$F_\s$ sets} (these are not necessarily closed).
+\end{bulletlist}
+We can continue taking countable unions and intersections of these ad nauseam, which is only to say that the Borel $\s$-algebra is truly huge! In general, there is no ``nice'' way of writing down an arbitrary element of the Borel $\s$-algebra (or any other $\s$-algebra). 
 
-In the special case where $X = \R$, there are several equivalent (and easier) ways to characterize the Borel $\s$-algebra
+In the special case where $X = \R$, there are several equivalent (and easier) ways to characterize the Borel $\s$-algebra. Before we get to that, we will prove a small, but very useful, result.
 
-\begin{proposition}The Borel $\sigma-$algebra on $\R$ is generated by 
-\begin{enumerate}
-	\item All open intervals, i.e. all intervals of the form $(a, b)$
-	\item All intervals of one of the following forms: $[a, b], (a, b], [a, b)$.
-	\item All rays of one of the following forms $(a, \infty), [a, \infty), (-\infty, b), (-\infty, b]$
-\end{enumerate}
+\begin{proposition}\label{prop:salggen}
+If $\calE_1$ and $\calE_2$ are two collections of subsets of $X$, and $\calE_1 \subset \s(\calE_2)$, then $\s(\calE_1) \subset \s(\calE_2)$.
 \begin{proof}
-Let $\mathcal{E}$ be one of these collections. Since $\mathcal{E} \in \mathcal{B}_\R$, $\mathcal{M}(\mathcal{E}) \subset \mathcal{B}_\R$. To show the reverse, all we have do is show that $\mathcal{M}(\mathcal{E})$ contains all open sets. Starting with (i), we note that every open set in $\R$ is a countable disjoint union of open intervals. To see this, let $A$ be an open set in $\R$. Then since open sets contain balls about each point, $A$ is a union of open intervals. Combining overlapping invervals, $A$ is a disjoint union of open intervals. Each of these open intervals contains a distinct rational number, since $\Q$ is dense in $\R$ and the open intervals are disjoint. Since $\Q$ is countable, there can only be countably many of these disjoint intervals. Thus the $\sigma$-algebra generated by the open intervals contains all open sets, thus contains $\mathcal{B}_\R$.
-
-For (ii) and (iii), all we have to do is show we can construct an open interval $(a, b)$ using countably many set operations. For example,
-
-\[
-(a, b) = \bigcap_{n=1}^\infty \left[ a - \frac{1}{n}, b - \frac{1}{n}  \right]
-\]
-
+Since $\s(\calE_2)$ is a $\s$-algebra containing $\calE_1$, and $\s(\calE_1)$ is the \emph{smallest} $\s$-algebra containing $\calE_1$, $\s(\calE_1) \subset \s(\calE_2)$.
 \end{proof}
 \end{proposition}
 
+We will now show that several convenient collections of subsets of $\R$ generate the Borel $\s$-algebra on $\R$.
+
+\begin{proposition}\label{prop:BorelRgen}
+The Borel $\sigma-$algebra on $\R$ is generated by the collection of:
+\begin{romannum}
+	\item All open intervals, i.e. all intervals of the form $(a, b)$.
+	\item All closed intervals, i.e. all intervals of the form $[a, b]$.
+	\item All half-open intervals of either the form $(a, b]$ or $[a, b)$.
+	\item All rays of one of the following forms $(a, \infty), [a, \infty), (-\infty, b), (-\infty, b]$.
+\end{romannum}
+\begin{proof}
+Let $\mathcal{E}$ be one of these collections. Since the open intervals and open rays are open sets, the closed intervals and closed rays are closed sets, and the half open intervals are the union of an open set and a closed set, i.e. $(a, b] = (a, b)\cup\{b\}$ and $[a, b) = \{a\}\cup(a, b)$, $\calE \subset \calB_\R$. By \cref{prop:salggen}, $\s(\calE) \subset \calB_\R$. We will now show the reverse, i.e. $\calB_\R \subset \s(\calE)$. Since the Borel $\s-$algebra is generated by all open sets, it suffices by \cref{prop:salggen} to show that $\s(\calE)$ contains all open sets. 
+
+Starting with (i), we note that every open set in $\R$ is a countable (or finite) union of disjoint open intervals. You may have seen this result before. If not, here is a nice heuristic argument. Let $A$ be an open set in $\R$. Then since open sets in $\R$ contain open intervals about each point, $A$ is a union of open intervals. Combining overlapping open intervals, we see that $A$ is actually a disjoint union of open intervals. Each of these open intervals contains a rational number, since $\Q$ is dense in $\R$. These rational numbers are distinct, since the open intervals are disjoint. Since $\Q$ is countable, there can only be countably (or finitely) many of these disjoint intervals. Since $\s(\calE)$ contains all open sets, $\calB_\R \subset \s(\calE)$.
+
+For (ii), (iii), and (iv), all we have to do is show we all open intervals lie in $\s(\calE)$, i.e. we can construct an open interval $(a, b)$ from the elements of $\calE$ using countably many set operations. For example, for (ii),
+\[
+(a, b) = \bigcup_{n=1}^\infty \left[ a + \frac{1}{n}, b - \frac{1}{n} \right],
+\]
+and for the first part of (iv),
+\[
+(a,b) = (-\infty,b) \cap (a,\infty) = (-\infty,b) \cap (-\infty, a]^c 
+= (-\infty,b) \cap \left[ \bigcap_{n=1}^\infty \left(-\infty, a+\frac{1}{n}\right) \right]^c.
+\]
+The result then follows from part (i) and \cref{prop:salggen}.
+\end{proof}
+\end{proposition}
+
+Finally, we prove a set-theoretic result which will prove useful. The idea is that we can replace an arbitrary countable union with a countable union of disjoint sets. For lack of a better term, I will call this process ``disjointification''.
+
+\begin{proposition}[Disjointification]\label{prop:disjointify}
+Let $\calM$ be a $\s$-algebra on a set $X$. If $\{ E_k\}_{k \in \N} \subset \calM$, then there exists a sequence of \emph{disjoint} sets $\{ E_k\}_{k \in \N} \subset \calM$ such that $F_k \subset E_k$ for all $k$ and $\bigcup_{k=1}^\infty F_k = \bigcup_{k=1}^\infty E_k$.
+\begin{proof}
+The proof is constructive. The idea is to construct $F_k$ by starting with $E_k$ and removing all elements of the previous sets in the sequence (see \cref{fig:disjointify}). Specifically, let 
+\begin{align*}
+F_1 &= E_1 \\
+F_2 &= E_2 \backslash E_1 \\
+F_3 &= E_3 \backslash (E_1 \cup E_2) \\
+&\vdots \\
+F_k &= E_k \backslash \left( \bigcup_{j=1}^{k-1} E_j \right).
+\end{align*}
+$F_k \subset E_k$, and $F_k \in \calM$ since it was constructed from elements of $\calM$ using finitely many set operations. The sets $F_k$ are pairwise disjoint and the two unions are equal by construction.
+\end{proof}
+\end{proposition}
+
+\begin{figure}
+\centerline{\includegraphics[width=8cm]{images/measures/disjointify.eps}}
+\caption{Venn diagrams showing first three steps in the ``disjointification'' of a union of sets.}
+\label{fig:disjointify}
+\end{figure}
+
+As a corollary, we can replace property (iii) in \cref{def:measure} with closure under countable, disjoint unions.
+
+\begin{corollary}\label{corr:salgdisjointunion}
+A collection $\calM$ of subsets of $X$ is a \emph{$\s$-algebra} if it satisfies properties (i) and (ii) in \cref{def:salg} and is closed under countable, disjoint unions, i.e. if $\{E_k\}_{k \in \N} \subset \calM$ and the sets $E_k$ are pairwise disjoint, then $\begin{aligned}\bigcup_{k=1}^\infty E_k \in \calM \end{aligned}$.
+\end{corollary}
+
+\section{Properties of measures}
+
+In this section, we will discuss important properties of measures. Note that, so far, we have only learned how to define measures on finite or countable sets. We start with some definitions. The first term we define is a measure space, which endows a set $X$ with a measure $\mu$ and a $\s$-algebra on which that measure is defined. For now, we will assume that $\mu$ is well-defined and satisfies the three properties of \cref{def:measure} on all of $\calM$. When we construct measures in the future, we will need to verify that this is indeed the case!
+
+\begin{definition}\label{def:measurespace}
+A \emph{measure space} is a triple $(X, \calM, \mu)$, where $X$ is a set, $\calM$ is a $\s$-algebra on $X$, and $\mu$ is a measure defined on $\calM$. 
+\end{definition}
+
+Next, we define two important classes of measures. Most measures which are of practical use fit into one of these categories. 
+
+\begin{definition}\label{def:sfinitemeasure}
+Let $(X, \calM, \mu)$ be a measure space.
+\begin{romannum}
+\item The measure $\mu$ is \emph{finite} if $\mu(X) < \infty$.
+\item The measure $\mu$ is $\s$-finite if we can write $X = \bigcup_{k=1}^\infty E_k$, where $E_k \in \calM$ and $\mu(E_k) < \infty$ for all $k \in \N$. In other words, $X$ is the union of sets which have finite measure.
+\end{romannum}
+\end{definition}
+
+For the remainder of this section, we will assume that $(X, \calM, \mu)$ is a measure space. Note that if $\mu$ is a finite measure, $\mu(E) < \infty$ for all $E \in X$. To see this, we can write $X$ as the disjoint union $X = E \cup E^c$; it follows from finite additivity $\mu$ that $\mu(E) + \mu(E^c) = \mu(X) < \infty$. If you have studied probability theory, $\mu$ is called a \emph{probability measure} on the \emph{sample space} $X$ if $\mu(X) = 1$.
+
+Now that we have defined a measure space, it's time to define some measures! For both of these examples, let $X$ be any set, and take $\calM = \calP(X)$. 
+\begin{remunerate}
+\item The \emph{counting measure} $\mu$ is defined by
+\begin{equation}\label{eq:meas:counting}
+\mu(E) = \begin{cases}
+|E| & \text{if $E$ is a finite set} \\
+\infty & \text{if $E$ is an infinite set},
+\end{cases}
+\end{equation}
+where $|E|$ is the cardinality of $E$ (i.e. number of elements in $E$). If $X = \{ x_k \}_{k \in \N}$ is a countable set, we can alternatively define the counting measure by defining $\mu\left( \{ x_k \}\right) = 1$ for all singletons $\{ x_k \}$.
+\item Let $x$ be any fixed element of $X$. The \emph{point mass} or \emph{Dirac measure} at $x$, denoted $\delta_{x}$, is defined by
+\begin{equation}\label{eq:meas:dirac}
+\delta_{x}(E) = \chi_E(x) = \begin{cases}
+0 & \text{if $x \notin E$} \\
+1 & \text{if $x \in E$}.
+\end{cases}
+\end{equation}
+The function $\chi_E(x)$ is called the \emph{characteristic function} of $E$ or the \emph{indicator function} of $E$.\footnote{You will sometimes see it written as $1_E(x)$ or $\mathbbm{1}_E(X)$.}
+\end{remunerate}
+
+The following theorem summarizes some of the most important properties of measures.
+\begin{theorem}\label{th:measureprop}
+Let $(X, \calM, \mu)$ be a measure space. Then the following properties hold for $E, F \in \calM$ and $\{ E_k\}_{k \in \N} \subset \calM$:
+\begin{romannum}
+\item (Monotonicity) If $E \subset F$, then $\mu(E) \leq \mu(F)$.
+\item (Set subtraction) If $E \subset F$ and $\mu(F) < \infty$, then $\mu(F\backslash E) = \mu(F) - \mu(E)$.
+\item (Countable subadditivity) $\mu\left( \bigcup_{k=1}^\infty E_k\right) \leq \sum_{k=1}^\infty \mu(E_k)$, where the sum is infinite if it does not converge to a finite value.
+\item (Continuity from below) If $\{ E_k\}_{k \in \N}$ is an \emph{increasing} sequence of sets, i.e. $E_1 \subset E_2 \subset \cdots$, then $\mu\left( \bigcup_{k=1}^\infty E_k\right) = \lim_{k\rightarrow \infty}\mu(E_k)$.
+\item (Continuity from above) If $\{ E_k\}_{k \in \N}$ is a \emph{decreasing} sequence of sets, i.e. $E_1 \supset E_2 \supset \cdots$ and $\mu(E_n) < \infty$ for some $n \geq 1$, then $\mu\left( \bigcap_{k=1}^\infty E_k\right) = \lim_{k\rightarrow \infty}\mu(E_k)$.
+\end{romannum}
+\begin{proof}
+\begin{romannum}
+\item If $E \subset F$, then $\mu(E) \leq \mu(E) + \mu(F\backslash E) = \mu(F)$, where the first inequality holds since $\mu(F\backslash E) \geq 0$, and the last equality holds by finite additivity.
+\item Since $E \subset F$, $\mu(E) < \infty$ by part (i), thus we can subtract $\mu(E)$ from both sides of the identity $\mu(E) + \mu(F\backslash E) = \mu(F)$ to get the result.
+\item Using \cref{prop:disjointify}, disjointify $\{ E_k\}_{k \in \N}$ to get the collection of disjoint sets $\{ F_k\}_{k \in \N}$ with $\bigcup_{k=1}^\infty F_k = \bigcup_{k=1}^\infty E_k$. Since $F_k \subset E_k$, it follows from monotonicity and countable additivity that
+\[
+\mu\left( \bigcup_{k=1}^\infty E_k\right) = \mu\left( \bigcup_{k=1}^\infty F_k\right) 
+= \sum_{k=1}^\infty \mu(F_k) \leq \sum_{k=1}^\infty \mu(E_k).
+\]
+\item Let $E_0 = \varnothing$. Since $\{ E_k\}_{k \in \N}$ is an increasing sequence of sets, we can disjointify their union to get 
+$\bigcup_{k=1}^\infty E_k = \bigcup_{k=1}^\infty (E_k\backslash E_{k-1})$, where the sequence of sets $\{E_k\backslash E_{k-1}\}_{k\in\N}$ is disjoint. It follows by countable additivity that 
+\begin{align*}
+\mu\left( \bigcup_{k=1}^\infty E_k \right) &= \mu\left( \bigcup_{k=1}^\infty (E_k\backslash E_{k-1}) \right)
+= \sum_{k=1}^\infty \mu(E_k\backslash E_{k-1}) = \lim_{n \rightarrow \infty} \sum_{k=1}^n \mu(E_k\backslash E_{k-1}) \\
+&= \lim_{n \rightarrow \infty} \mu \left( \bigcup_{k=1}^n (E_k\backslash E_{k-1}) \right) 
+= \lim_{n\rightarrow \infty} \mu(E_n),
+\end{align*}
+where for the last equality we used the fact that $E_n = \bigcup_{k=1}^n (E_k\backslash E_{k-1})$, since $\{ E_k\}_{k \in \N}$ is an increasing sequence of sets.
+\item Without loss of generality, we can take $\mu(E_1) < \infty$; since $\{ E_k\}_{k \in \N}$ is a decreasing sequence of sets, we can discard the first $n-1$ sets without affecting their intersection. Define $F_k = E_1 \backslash E_k$. Since $\{ F_k\}_{k \in \N}$ in an increasing sequence of sets, it follows from parts (iv) and (ii) that 
+\begin{equation}\label{eq:meas:contbelow1}
+\begin{aligned}
+\mu\left( \bigcup_{k=1}^\infty F_k\right) &= \lim_{k\rightarrow \infty}\mu(F_k)
+= \lim_{k\rightarrow \infty}\mu(E_1 \backslash E_k) 
+= \lim_{k\rightarrow \infty}\left[\mu(E_1) - \mu(E_k)\right] \\
+&= \mu(E_1) - \lim_{k\rightarrow \infty} \mu(E_k).
+\end{aligned}
+\end{equation}
+By De Morgan's Laws,
+$\begin{aligned}
+\bigcup_{k=1}^\infty F_k = \bigcup_{k=1}^\infty (E_1\backslash E_k) = E_1 \backslash \bigcap_{k=1}^\infty E_k.
+\end{aligned}
+$
+It follows from (ii) that
+\begin{equation}\label{eq:meas:contbelow2}
+\mu\left( \bigcup_{k=1}^\infty F_k \right) = \mu(E_1) - \mu\left(\bigcap_{k=1}^\infty E_k \right).
+\end{equation}
+Equating the RHS of equations \cref{eq:meas:contbelow1} and \cref{eq:meas:contbelow2},
+\[
+\mu(E_1) - \lim_{k\rightarrow \infty} \mu(E_k) = \mu(E_1) - \mu\left(\bigcap_{k=1}^\infty E_k \right).
+\]
+Since $\mu(E_1) < \infty$, we can subtract it from both sides and rearrange to get the result.
+\end{romannum}
+\end{proof}
+\end{theorem}
+
+NULL SETS NEXT
+
+
 \begin{exercises}
 \item Let $\calM$ and $\calN$ be $\s$-algebras on a set $X$. Show that $\calM \cap \calN$ is a $\s$-algebra.
+
 \item Let $\{\calM_\alpha\}_{\alpha\in \calA}$ be $\s$-algebras on a set $X$, where $\calA$ is an arbitrary index set (which may be uncountable). Show that $\bigcap_{\alpha\in \calA}\calM_\alpha$ is a $\s$-algebra.
+
 \item Let $X$ be an uncountable set, and define
 \[
 \calA = \{ E \subset X : E \text{ is countable or } E^c \text{ is countable} \}.
 \]
 Show that $\calA$ is a $\s$-algebra. This is called the \emph{countable-cocountable $\s$-algebra}, where the the prefix \emph{co-} in this case indicates complement.
+
+\item Complete the proof of parts (iii) and (iv) of \cref{prop:BorelRgen}.
+
+\item Prove that the measures defined by \cref{eq:meas:counting} and \cref{eq:meas:dirac} are measures.
 \end{exercises}
+
+
 
 \end{document}
