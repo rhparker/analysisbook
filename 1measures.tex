@@ -1,0 +1,213 @@
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+The idea of measure is a fundamental concept in mathematics. Mathematicians in ancient times knew how to compute the areas of figures such as triangles, rectangles, and circles. The development of calculus allowed us to measure the ``area under a curve'' by approximating that area with a horizontal stack of rectangles and taking the limit as the width of the rectangles goes to 0.
+
+What is measure theory, and why should you care? Consider the set of real numbers, and let's look at four subsets of $\R$: the natural numbers $\N$, the rational numbers $\Q$, the interval $[0, 1]$, and $\R$ itself. There are (at least) two different notions of the ``size'' of these subsets. If you are a set theorist, you might think of the ``size'' of a set in terms of the number of elements in that set; set theorists call this the cardinality of a set. Any set that is the ``same size'' as $\N$ is called a countable set. An example of a countable set is $\Q$; this result is proved using a clever ``grid''
+argument. The set $[0, 1]$ is ``bigger'' than $\N$, and is called an uncountable set\footnote{If you want to be fancy, you can say that $[0,1]$ has the cardinality of the continuum.}; the proof is known as Cantor's diagonal argument. Finally, $\R$ has the same cardinality as $[0,1]$. The conclusion is that ``some infinities are bigger than other infinities'', to quote \emph{The Fault in our Stars} by John Green\footnote{While John Green uses this concept to create a beautiful analogy (no spoilers!), the examples he provides are unfortunately not mathematically correct.}.
+
+Another notion of ``size'' is the length of a set. We can check using a ruler that $[0, 1]$ has length 1. If we say that the empty set has 0 length and $\R$ itself has infinite length, then the ``length'' of $\N$ and $\Q$ should be ``somewhere in the middle'', although where in the middle and what that even means is not clear at this point. The central goal of measure theory is to generalize our intuitive ideas of length, area, and volume to subsets of arbitrary sets. It is interesting that some of the results we will get will be quite counterintuitive! Along the way, we will apply this theory to familiar territory such as the line $\R$ and the plane $\R^2$, and we will see that our new theory not only encompasses our commonsense notions of length and and area but also allows us to ``measure'' subsets which we would not be able to do with a ruler.
+
+Why might you want to do such a thing? Here are a few applications to get started.
+
+\begin{remunerate}
+	\item Probability. Suppose you throw a dart at the unit interval $[0, 1]$ uniformly at random. I ask you what is the probability that it lands between $1/4$ and $3/4$? No problem, you say. It's $1/2$, since that is the length of the interval $[1/4, 3/4$]. That's great, I say, let's make it harder. What is the probability that it lands on a rational number? Same thing, you say, it's just the ``length'' of the set of rational numbers in the unit interval. But what is that ``length''?
+
+	\item Integration of functions. A classic counterexample for a function which is not Riemann integrable is the characteristic function of the rational numbers on the unit interval, i.e. 
+	\begin{equation}
+	\chi(x) = \begin{cases}
+	1 & x \in \Q \text{ and } x \in [0, 1] \\
+	0 & \text{otherwise}.
+	\end{cases}
+	\end{equation}
+	Since both rational numbers and irrational numbers are dense in $\R$, any partition of $[0, 1]$ contains both irrational numbers and rational numbers. No matter what partition you take, the upper Riemamn sum is always 1 and the lower Riemann sum is always 0, and never the twain shall meet. But we should be able to do this! To find the ``area under the curve'', all we need to do is compute
+	\begin{align*}
+	\int_0^1 \chi(x) dx &= 0 \cdot \text{``length of irrationals in [0,1]''} + 1 \cdot \text{``length of rationals in [0,1]''} \\
+	&= \text{``length of rationals in [0,1]''}.
+	\end{align*}
+	The answer should be the ``length'' of the set of rational numbers in the unit interval $[0,1]$, assuming we can figure out what that is.
+
+	\item Integration theory. If $\{ f_k \}_{k \in \N}$ is a set of continuous, real-valued functions on $[a,b]$ and $\lim_{k\rightarrow \infty} f_k(x) = f(x)$, when is the following statement true?
+	\[
+	\lim_{k\rightarrow \infty} \int_a^b f_k(x) dx = \int_a^b \lim_{k\rightarrow \infty} f_k(x) dx = 
+	\int_a^b f(x) dx.
+	\] 
+	In other words, when is the limit of the integrals equal to the integral of the limit? Measure theory gives us more general theorems for when we can exchange the processes of limits and integration. 
+\end{remunerate}
+
+\section{Introduction to measures}
+
+With this motivation in mind, we will define a measure $\mu$ on an arbitrary set $X$. What properties do we want this measure to have? If $A$ is a subset of $X$, then we certainly want $\mu(A) \geq 0$, since ``negative length'' makes no sense! We also want to permit $\mu(A)$ to be infinite for some subsets of $X$. The entire real line has ``infinite length'' since it has no beginning and no end, so it makes sense that we might want $\mu(\R) = \infty$. At the other extreme, the empty set should have no length, area, or volume, so we want to have $\mu(\varnothing) = 0$. Finally, if $A$ and $B$ are disjoint subsets of $X$, it makes sense that we should have $\mu(A\cup B) = \mu(A) + \mu(B)$. In fact, we will actually demand a stronger additivity property, as you will see in the following definition.
+
+\begin{definition}\label{def:measure}
+A \emph{measure} on a set $X$ is a function $\mu$ on subsets of $X$ with the following three properties:
+\begin{romannum}
+\item $\mu(E) \geq 0$, and $\infty$ is allowed.
+\item $\mu(\varnothing) = 0$.
+\item If the sets $\{E_k\}_{k \in \N}$ are disjoint, then 
+	\begin{equation}\label{eq:meas:cadd}
+	\mu \left( \bigcup_{k=1}^\infty E_k \right) = \sum_{k=1}^\infty \mu(E_k),
+	\end{equation}
+	where this is infinite if the sum does not converge to a finite value. This last property is called \emph{countable additivity}.
+\end{romannum}
+\end{definition}
+Depending on the set $X$, other properties we might like $\mu$ to have (but are not part of the definition of a measure) are:
+\begin{romannum}
+\setcounter{rmnum}{3}
+\item $\mu$ is invariant under symmetries such as translations, rotations, and reflections.
+\item $\mu$ agrees with our common notion of length, area, and volume. For example, if $X = \R$, then we might like $\mu([0,1]) = 1$.
+\end{romannum}
+It is worth pointing out that countable additivity implies \emph{finite additivity}, i.e. if $E_1, \dots, E_k$ are disjoint sets, then $\mu \left( \bigcup_{k=1}^n E_k \right) = \sum_{k=1}^n \mu(E_k)$. To see this, take $E_j = \varnothing$ for $j > n$ in \cref{eq:meas:cadd}.
+
+
+Notice that I intentionally left the domain of $\mu$ vague. We would like the domain of $\mu$ to be as large as possible. Ideally, we would like it to the power set of $X$, denoted $\calP(X)$, which is the set of all subsets of $X$. However, to quote the musical Les Miserables, ``there are some dreams that cannot be,'' as we will see in the following example.
+
+\begin{example}\label{ex:nonmeasurableset}
+Suppose we have a measure $\mu$ on the interval $I = [0, 1)$. Since we want this to represent ``length'', we will assume that properties (iv) and (v) hold, as well as the ones in \cref{def:measure}. We will demonstrate that the properties (iii), (iv), and (v) are inconsistent. In other words, we will construct a ``nonmeasurable set''. Here's how we do it.
+\begin{remunerate}
+	\item Define the equivalence relation $\sim$ on $I$ by $x \sim y$ if $x - y$ is rational. In other words, we identify elements of $I$ which differ by a rational number. 
+	\item This equivalence relation partitions $I$ into disjoint equivalence classes, i.e. every element in $I$ belongs to exactly one of these equivalence classes. For $x \in I$, the equivalence class of $x$, denoted $[x]$, consists of all elements in $I$ which differ from $x$ by a rational number, i.e. $[x] = \{ y \in I : y \sim x \}$. These equivalence classes are all nonempty since, at minimum, every element belongs to its own equivalence class. 
+	\item Construct a subset $N$ of $I$ by placing into it exactly one member of each equivalence class. To do this, we have to use the axiom of choice, since we have no clue what's in these equivalence classes. Since $N$ contains only a single element from each equivalence class, for any distinct $x$ and $y$ in $N$, the difference $x-y$ is irrational.
+	\item For every rational number $r$ in $I$, define the subset $N_r$ of $I$ to be the ``rotation of $N$ by $r$''. In other words, shift $N$ to the right by $r$, and then ``wrap around'' the part that sticks out past 1 by subtracting 1 (see \cref{fig:nonmeasurableset}). Alternatively, you can imagine constructing $N_r$ by ``swapping'' the two pieces of $N$ which are to the left and the right of the point $1-r$. To abuse terminology from number theory, we will write this as $N_r = N + r\:(\Mod 1)$. By construction, $N_r \subset I$, and there are countably many sets $N_r$ since the rational numbers are countable.
+	\item By property (iv), invariance under translation, $\mu(N_r) = \mu(N)$ for all $r$, since all we did was swap two pieces of $N$ to get $N_r$.
+	\item Next, we will show that the collection of all sets $N_r$ partitions $I$, i.e. every $x \in I$ belongs to exactly one set $N_r$. 
+	\begin{bulletlist} 
+	\item Show that every $x \in I$ belongs to at least one set $N_r$. Since the equivalence relation $\sim$ partitions $I$, $x$ must belong to one of these equivalence classes. Since a representative from each equivalence class is contained in $N$, this means that $x \in [y]$ for some $y \in N$, so that $x \sim y$. This in turn implies that $x - y = r$ for some rational number $r$. If $x \geq y$, then $x \in N_r$, and if $x < y$, then $x \in N_{r+1}$.
+	\item Show that $x$ cannot belong to two distinct $N_r$. If $x \in N_r \cap N_s$ for distinct $r$ and $s$, then both $p = x - r\:(\Mod 1)$ and $q = x - s\:(\Mod 1)$ are elements of $N$. The difference $p - q = s - r\:(\Mod 1)$ is rational, which is impossible since the difference between any two distinct elements in $N$ is irrational.
+	\end{bulletlist}
+	\item Since the set $\{ N_r : r \in \Q \cap I \}$ partitions $I$, it follows from properties (v) and (iii) above and part 5 that
+	\begin{align*}
+	1 = \mu( [0, 1) ) &= \sum_{r \in \Q \cap I} \mu(N_r) = \sum_{r \in \Q \cap I} \mu(N).
+	\end{align*}
+	There are two cases to consider. If $\mu(N) = 0$, then
+	\begin{align*}
+	1 = \mu( [0, 1) ) &= \sum_{r \in \Q \cap I} \mu(N) = \sum_{r \in \Q \cap I} 0 = 0,
+	\end{align*}
+	which is impossible. If $\mu(N) = L > 0$, then
+	\begin{align*}
+	1 = \mu( [0, 1) ) &= \sum_{r \in \Q \cap I} \mu(N) = \sum_{r \in \Q \cap I} L = \infty,
+	\end{align*}
+	which is also impossible.
+\end{remunerate}
+\end{example}
+
+	\begin{figure}
+	\centerline{\includegraphics[width=10cm]{images/measures/nonmeasurableset.eps}}
+	\caption{Construction of nonmeasurable set from \cref{ex:nonmeasurableset}.}
+	\label{fig:nonmeasurableset}
+	\end{figure}
+
+In a sense, we ``cheated'' in the above example. Since used the axiom of choice to give us our set $N$. we have no idea what $N$ ``actually is''. (For your next party trick, you can use the axiom of choice to take a ball apart into six pieces and recombine them to get two balls of the exact same size, which is known as the Banach–Tarski paradox.) Be that as it may, we have shown that we cannot define a measure on $X$ with all of the properties we desire whose domain is the entire power set of $X$. 
+
+If $X$ is a finite or countable set, we are actually able to define a measure on $\calP(X)$ without any issues. First, consider the case of a finite set $X = \{ x_1, x_2, \dots, x_n \}$. A \emph{singleton} is a set with exactly one element. If we specify the value of $\mu\left(\{ x_k \}\right)$ for all singletons $\{ x_k \}$, then the measure
+\begin{equation}\label{eq:meas:finite}
+\mu(A) = \sum_{x_k \in A} \mu\left(\{ x_k \}\right)
+\end{equation}
+is well-defined for all subsets of $X$, and is finite as long as all the values $\mu\left(\{ x_k \}\right)$ are finite.
+
+\begin{example}Let $X = \{ 1, 2, 3, 4, 5, 6\}$ represent the faces of a standard six-sided die. Assuming the die is fair, define a measure on $X$ by $\mu\left(\{ x_k \}\right) = 1/6$ for all $k$. Then, for example, $\mu(\{1,3,5\}) = \mu(\{1\})+\mu(\{3\})+\mu(\{5\}) = 1/6+1/6+1/6 = 1/2$, and $\mu(X) = 1$.
+\end{example}
+
+Similarly, let $X = \{ x_k\}_{k \in \N}$ be a countable set. If we once again specify the value of $\mu\left(\{ x_k \}\right)$ for all singletons $\{ x_k \}$, then the measure defined by \cref{eq:meas:finite} is well-defined for all subsets of $X$. In general, $\mu(A)$ may be infinite for some subsets $A$ of $X$, but if $\mu(X) = \sum_{k=1}^\infty \mu\left(\{ x_k\}\right) < \infty$, $\mu(A)$ is finite for all $A$.
+
+\begin{example}Let $X = \N$, and define two measures $\mu_1$ and $\mu_2$ by $\mu_1(n) = n$ and $\mu_2(n) = \frac{1}{2^n}$. Then $\mu_1(\N) = \infty$, but $\mu_2(\N) = \sum_{n=1}^\infty \frac{1}{2^n} = 1$.
+\end{example}
+
+\section{Sigma Algebras}
+
+In the previous section, we showed that if $X$ is an uncountable set, we cannot guarantee that a measure $\mu$ will be well defined on all subsets of $X$ and have all of the properties we desire. How do we get out of this quandary? One option would be to relax our definition of a measure, say by requiring finite additivity instead of countable additivity, or to give up properties (iv) and (v). Since we don't really want to do that, we will instead narrow the domain of $\mu$ from the power set of $X$ to something smaller. The goal is to come up with a collection of subsets of $X$ on which our measure $\mu$ is well-defined. Although this collection cannot contain all subsets of $X$, it should ideally be ``as large as possible''. In addition, it should at minimum contain familiar sets such as open sets and closed sets. It turns out that this is possible, and, in the words of the great philosophers Mick Jagger and Keith Richards, ``You can't always get what you want, but if you try sometimes, you just might find you get what you need''. The natural choice for the domain of a measure is an object known as a $\s$-algebra.
+
+\begin{definition}\label{def:salg}
+A collection $\calM$ of subsets of $X$ is a \emph{$\s$-algebra} if 
+\begin{romannum}
+	\item $X \in \calM$.
+	\item $\calM$ is closed under complement, i.e. if $E \in \calM$ then $E^c \in \calM$.
+	\item $\calM$ is closed under \emph{countable} unions, i.e. if $\{E_k\}_{k \in \N} \subset \calM$ then $\begin{aligned}\bigcup_{k=1}^\infty E_k \in \calM \end{aligned}$.
+	
+\end{romannum}
+An \emph{algebra} is the same thing except it is only closed under \emph{finite} unions, i.e. if $E_1, \dots, E_n \in \calM$ then $\begin{aligned}\bigcup_{k=1}^\infty E_k \in \calM \end{aligned}$.
+\end{definition}
+
+Other properties of $\s$-algebras which follow from \cref{def:salg} and standard theorems from set theory include
+\begin{romannum}\setcounter{rmnum}{3}
+	\item $\varnothing \in \calM$.
+	\item $\calM$ is closed under countable intersection, i.e. if $\{E_k\}_{k \in \N} \subset \calM$ then $\begin{aligned}\bigcap_{k=1}^\infty E_k \in \calM \end{aligned}$. This follows from DeMorgan's laws, which says that the complement of the intersection is the union of the complements:
+	\[
+	\bigcap_{k=1}^\infty E_k = \left[ \left( \bigcap_{k=1}^\infty E_k \right)^c \right]^c
+	= \left( \bigcup_{k=1}^\infty E_k^c \right)^c.
+	\]
+	\item $\calM$ is closed under relative complement, i.e. if $E, F \in \calM$ then $E \backslash F \in \calM$. This is true since $E \backslash F = E \cap F^c$.
+\end{romannum}
+
+Note that $\s$-algebras are closed under all countable set operations, but not uncountable set operations. Since we will be using a $\s$-algebra as the domain for a measure, this makes sense, since the definition of a measure includes countable additivity. 
+
+MOAR EXAMPLES.
+
+
+It is easy enough to come up with examples of $\sigma$-algebras (the power set of $X$ and the set $\{ \varnothing, X \}$ being two trivial ones). That being said, we are mainly interested in two $\sigma$-algebras. The first is the $\sigma$-algebra generated by a collection of subsets.
+
+\begin{definition}Let $\mathcal{E}$ be a collection of subsets of $X$. Then the \emph{$\sigma$-algebra generated by $\mathcal{E}$}, denoted $\mathcal{M}(\mathcal{E})$, is the unique smallest $\sigma$-algebra containing $\mathcal{E}$. To be precise, we can define $\mathcal{E}$ in one of these two equivalent ways.
+\begin{enumerate}[(i)]
+\item $\mathcal{M}(\mathcal{E})$ is the intersection of all $\sigma-$algebras containing $\mathcal{E}$.
+\item If $\mathcal{N}$ is another $\sigma$-algebra containing $\mathcal{E}$, then $\mathcal{N} \subset \mathcal{M}(\mathcal{E})$.
+\end{enumerate}
+\end{definition}
+
+You can verify that the arbitrary intersection of $\s$-algebras is a $\s$-algebra. It is worth noting that $\s$-algebras are huge and unwieldy, and there is no ``nice'' way of writing down an arbitrary element of $\calM(\mathcal{E})$ in terms of elements of $\mathcal{E}$. 
+
+The most important of these $\sigma$-algebras is the Borel $\sigma$-algebra.
+
+\begin{definition}
+The \emph{Borel $\sigma$-algebra} on $X$, denoted $\mathcal{B}_X$, is the $\sigma$-algebra generated by the collection of open sets of $X$.
+\end{definition}
+
+This definition, of course, requires that $X$ be a topological space, but if it isn't, why are we bothering with all of this in the first place? In the special case where $X = \R$, we have several equivalent (and easier) ways to characterize the Borel $\sigma$-algebra
+
+\begin{proposition}The Borel $\sigma-$algebra on $\R$ is generated by 
+\begin{enumerate}
+	\item All open intervals, i.e. all intervals of the form $(a, b)$
+	\item All intervals of one of the following forms: $[a, b], (a, b], [a, b)$.
+	\item All rays of one of the following forms $(a, \infty), [a, \infty), (-\infty, b), (-\infty, b]$
+\end{enumerate}
+\begin{proof}
+Let $\mathcal{E}$ be one of these collections. Since $\mathcal{E} \in \mathcal{B}_\R$, $\mathcal{M}(\mathcal{E}) \subset \mathcal{B}_\R$. To show the reverse, all we have do is show that $\mathcal{M}(\mathcal{E})$ contains all open sets. Starting with (i), we note that every open set in $\R$ is a countable disjoint union of open intervals. To see this, let $A$ be an open set in $\R$. Then since open sets contain balls about each point, $A$ is a union of open intervals. Combining overlapping invervals, $A$ is a disjoint union of open intervals. Each of these open intervals contains a distinct rational number, since $\Q$ is dense in $\R$ and the open intervals are disjoint. Since $\Q$ is countable, there can only be countably many of these disjoint intervals. Thus the $\sigma$-algebra generated by the open intervals contains all open sets, thus contains $\mathcal{B}_\R$.
+
+For (ii) and (iii), all we have to do is show we can construct an open interval $(a, b)$ using countably many set theory operators. For example,
+
+\[
+(a, b) = \bigcap_{n=1}^\infty \left[ a - \frac{1}{n}, b - \frac{1}{n}  \right]
+\]
+
+\end{proof}
+\end{proposition}
+
+The final item to discuss is the dreaded product $\sigma-$algebra. Although we can define this for arbitrary Cartesian products, we will only deal with finite products here, since it's way easier and does not involve projections and other such nonsense.
+
+\begin{definition}
+Let $(X_1, \mathcal{M}_1), \dots, (X_n, \mathcal{M}_n)$ be sets together with $\sigma-$algebras defined on them. Then the \emph{product $\sigma-$algebra} on $X_1 \times \dots \times X_n$, denoted $\otimes \mathcal{M}_k$, is the $\sigma-$algebra generated by sets of the form 
+
+\[
+E_1 \times \dots \times E_n
+\]
+
+where $E_k \in \mathcal{M}_k$.
+\end{definition}
+
+Of particular interest is the product Borel $\sigma-$algebra. Let $X_1, \dots, X_n$ and let $X = X_1 \times \dots \times X_n$. Then we note that 
+
+\begin{equation}
+\otimes_{k=1}^n \mathcal{B}_{X_k} \subset B_X
+\end{equation}
+
+This is true since if $E_1, \dots, E_n$ are open sets in $X_1, \dots, X_n$, $E_1 \times \dots \times E_n$ is an open set in $X$. In the case that all the $X_i$ are separable metric spaces, these two are acually equal. Recall from topology that a metric space is separable if it contains a countable, dense subset. This term is unfortunately named, since it is not one of the separability axioms of topological spaces (it is actually one of the countability axioms), but they won't let me rename it.
+
+\begin{proposition}
+If $X_1, \dots, X_n$ are separable metric spaces, then
+
+\begin{equation}
+\otimes_{k=1}^n \mathcal{B}_{X_k} = B_X
+\end{equation}
+\end{proposition}
+
+\end{document}
